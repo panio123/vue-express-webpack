@@ -1,0 +1,6 @@
+div{
+    color:red;
+    font-size: 60px;
+    cursor: url('/static/img/cur.png'),auto;
+    line-height: 150px;
+}

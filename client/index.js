@@ -1,10 +1,10 @@
 import Vue from 'vue';
-import url from './index.css';
+import './index.css';
+import App from './App.vue';
 new Vue({
     el:'#app',
-    template:'<div>{{msg}}<img :src="img"></div>',
-    data:{
-        msg:'liupan23',
-        img:'/static/img/QQ20170319-0.jpg'
+    template:'<App/>',
+    components:{
+        App
     }
 });

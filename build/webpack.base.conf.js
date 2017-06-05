@@ -1,6 +1,7 @@
 var path = require('path');
 var config = require('../config');
-
+var isProduction = process.env.NODE_ENV === 'production';
+console.log('isProduction',isProduction);
 function resolve(dir) {
     return path.join(__dirname, '..', dir);
 }
@@ -18,17 +19,20 @@ module.exports = {
         extensions: ['.js', '.json'],
         alias: {
             'vue': 'vue/dist/vue.esm.js',
-            '@':resolve('/client/components')
+            '@': resolve('/client/components')
         }
     },
     module: {
         rules: [{
             test: /.vue$/,
-            loader: 'vue-loader'
+            loader: 'vue-loader',
+            options: {
+                extractCSS: isProduction
+            }
         }, {
             test: /\.js$/,
             loader: 'babel-loader',
-            include: [resolve('src'), resolve('test')]
+            include: [resolve('client')]
         }, {
             test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
             loader: 'url-loader',

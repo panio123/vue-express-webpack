@@ -1,16 +1,17 @@
 <template>
   <div class="page">
-    432ojfiewojfieofjiaow
     <hello></hello>
   </div>
 </template>
 <script>
   import Hello from '@/Hello.vue';
-  export default{
+  export default {
     name: '',
-    components:{Hello},
+    components: {
+      Hello
+    },
     props: {},
-    data(){
+    data() {
       return {
 
       }
@@ -18,8 +19,8 @@
   }
 </script>
 <style>
-.page{
-  background: #000;
-}
-
+  .page {
+    width: 100vw;
+    height: 100vh;
+  }
 </style>

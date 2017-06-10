@@ -1,20 +1,29 @@
 <template>
   <div class="hello">
-    432432fejsklfsja;
+    {{msg}}
+    <button @click="getJson">点击请求测试接口</button>
   </div>
 </template>
 <script>
-  export default{
+  import API from 'API'
+  export default {
     name: '',
     props: {},
-    data(){
+    data() {
       return {
-
+        msg: ''
+      }
+    },
+    methods: {
+      getJson() {
+        API.getJson.get().then(result => {
+          console.log(result);
+          this.msg = result.body.title;
+        });
       }
     }
   }
 </script>
 <style>
-
 
 </style>

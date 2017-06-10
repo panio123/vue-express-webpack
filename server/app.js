@@ -2,15 +2,17 @@ var path = require('path');
 var express = require('express');
 var app = express();
 var isDev = process.env.NODE_ENV !== 'production';
+let router = require('./router');
 var port;
 
+app.use('/', router);
 if (isDev) {
-    var webpack = require('webpack');
-    var WebpackDevMiddleware = require('webpack-dev-middleware');
-    var WebpackHotMiddleware = require('webpack-hot-middleware');
-    var webpackConfig = require('./build/webpack.dev.conf');
-    var config = require('./config');
-    var compiler = webpack(webpackConfig);
+    let webpack = require('webpack');
+    let WebpackDevMiddleware = require('webpack-dev-middleware');
+    let WebpackHotMiddleware = require('webpack-hot-middleware');
+    let webpackConfig = require('../build/webpack.dev.conf');
+    let config = require('../config');
+    let compiler = webpack(webpackConfig);
     port = config.dev.port;
     app.use(WebpackDevMiddleware(compiler, {
         publicPath: webpackConfig.output.publicPath,
@@ -22,9 +24,10 @@ if (isDev) {
         log: console.log
     }));
     app.use('/static', express.static('./static'));
-    app.use('/view', express.static('./server/view'));
-    app.use('/static', express.static('./server/static'));
-} else {}
+} else {
+    app.use('/view', express.static('./view'));
+    app.use('/static', express.static('./static'));
+}
 
 app.listen(port, function () {
     console.log('Listening on ' + port);

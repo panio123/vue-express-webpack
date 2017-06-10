@@ -1,3 +1,5 @@
+require('./util/common');
+
 var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -10,13 +12,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-app.use('/', router);
 
 function resolveStaticPath(dirname) {
-    let pre = isDev ? './server' : '/';
+    let pre = isDev ? './server' : './';
     return path.join(pre, dirname);
 }
 
+app.use('/example', express.static(resolveStaticPath('/example')));
+app.use('/upload', express.static(resolveStaticPath('/upload')));
+app.use('/static', express.static('./static'));
+
+
+console.log('isDev', isDev);
 if (isDev) {
     let webpack = require('webpack');
     let WebpackDevMiddleware = require('webpack-dev-middleware');
@@ -25,7 +32,7 @@ if (isDev) {
     let webpackConfig = require('../build/webpack.dev.conf');
     let config = require('../config');
     let compiler = webpack(webpackConfig);
-    port = config.dev.port;
+    port = config.dev.port || process.env.NODE_ENV.PORT;
     app.use(history());
     app.use(WebpackDevMiddleware(compiler, {
         publicPath: webpackConfig.output.publicPath,
@@ -37,12 +44,13 @@ if (isDev) {
         log: console.log
     }));
 } else {
-    port = process.env.NODE_ENV.PORT;
+    port = process.env.PORT;
+    app.use(express.static('./view'));
 }
-app.use('/upload', express.static(resolveStaticPath('/upload')));
 
-app.use('/static', express.static('./static'));
+app.use('/', router);
 
+console.log('port', port);
 app.listen(port, function () {
     console.log('Listening on ' + port);
 });

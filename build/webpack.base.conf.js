@@ -7,6 +7,13 @@ function resolve(dir) {
     return path.join(__dirname, '..', dir);
 }
 
+function assetsPath(_path) {
+    var assetsSubDirectory = process.env.NODE_ENV === 'production' ?
+        config.build.assetsSubDirectory :
+        config.dev.assetsSubDirectory;
+    return path.posix.join(assetsSubDirectory, _path);
+}
+
 module.exports = {
     entry: {
         index: resolve('client/index.js')
@@ -40,14 +47,14 @@ module.exports = {
             loader: 'url-loader',
             options: {
                 limit: 10000,
-                name: 'img/[name].[hash:7].[ext]'
+                name: assetsPath('img/[name].[hash:7].[ext]')
             }
         }, {
             test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
             loader: 'url-loader',
             options: {
                 limit: 10000,
-                name: 'fonts/[name].[hash:7].[ext]'
+                name: assetsPath('fonts/[name].[hash:7].[ext]')
             }
         }]
     }

@@ -38,15 +38,18 @@ npm run logs
 ```
 
 - 打包代码
+
 ``` bash
 #打包后的文件直接输出到 server 中
 npm run build
 ```
 
 - 上线
+
 上线项目，只需要将server内的东西上传至服务器，然后使用pm2启动即可。
 
 - 不用pm2启动-服务端代码修改后，无法自动重启使代码立即生效。
+
 ``` bash
 #不建议使用这种方式
 npm run dev

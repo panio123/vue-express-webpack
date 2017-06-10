@@ -12,8 +12,9 @@ app.use(bodyParser.urlencoded({
 }));
 app.use('/', router);
 
-function resolveStaticPath() {
-    return isDev ? './server' : '';
+function resolveStaticPath(dirname) {
+    let pre = isDev ? './server' : '/';
+    return path.join(pre, dirname);
 }
 
 if (isDev) {
@@ -35,8 +36,8 @@ if (isDev) {
     }));
 } else {
     port = process.env.NODE_ENV.PORT;
-    app.use('/upload', express.static(resolveStaticPath() + './upload'));
 }
+app.use('/upload', express.static(resolveStaticPath('/upload')));
 
 app.use('/static', express.static('./static'));
 

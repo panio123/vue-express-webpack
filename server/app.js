@@ -21,10 +21,12 @@ if (isDev) {
     let webpack = require('webpack');
     let WebpackDevMiddleware = require('webpack-dev-middleware');
     let WebpackHotMiddleware = require('webpack-hot-middleware');
+    let history = require('connect-history-api-fallback');
     let webpackConfig = require('../build/webpack.dev.conf');
     let config = require('../config');
     let compiler = webpack(webpackConfig);
     port = config.dev.port;
+    app.use(history());
     app.use(WebpackDevMiddleware(compiler, {
         publicPath: webpackConfig.output.publicPath,
         stats: {

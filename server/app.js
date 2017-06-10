@@ -1,11 +1,18 @@
 var path = require('path');
 var express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
 var isDev = process.env.NODE_ENV !== 'production';
 let router = require('./router');
 var port;
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use('/', router);
+
+
 if (isDev) {
     let webpack = require('webpack');
     let WebpackDevMiddleware = require('webpack-dev-middleware');

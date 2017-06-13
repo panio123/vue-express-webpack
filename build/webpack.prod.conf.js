@@ -8,12 +8,13 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var htmlplugins = [];
-Object.keys(baseWebpackConfig.entry).forEach(function (name) {
+let entryKeys = Object.keys(baseWebpackConfig.entry)
+entryKeys.forEach(function (name) {
     // https://github.com/ampedandwired/html-webpack-plugin
     var htmlplugin = new HtmlWebpackPlugin({
         filename: config.build.html + '/' + name + '.html',
         template: './client/index.html',
-        chunks: [name],
+        chunks: ['common', name],
         inject: true,
         minify: {
             removeComments: true,
@@ -27,6 +28,26 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
     });
     htmlplugins.push(htmlplugin);
 });
+let commeChunk;
+if (entryKeys.length > 1) {
+    commeChunk = new webpack.optimize.CommonsChunkPlugin('common.js');
+} else {
+    // split vendor js into its own file
+    commeChunk = new webpack.optimize.CommonsChunkPlugin({
+        name: 'common',
+        minChunks: function (module, count) {
+            // console.log(module.resource);
+            // any required modules inside node_modules are extracted to vendor
+            return (
+                module.resource &&
+                /\.js$/.test(module.resource) &&
+                module.resource.indexOf(
+                    path.join(__dirname, '../node_modules')
+                ) === 0
+            );
+        }
+    });
+}
 
 let prodWebpackConfig = merge(baseWebpackConfig, {
     devtool: config.build.productionSourceMap ? '#source-map' : false,
@@ -56,6 +77,7 @@ let prodWebpackConfig = merge(baseWebpackConfig, {
             },
             sourceMap: true
         }),
+        commeChunk,
         new ExtractTextPlugin({
             filename: config.build.assetsSubDirectory + '/css/[name].[contenthash].css'
         }),

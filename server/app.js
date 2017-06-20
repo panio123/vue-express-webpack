@@ -17,8 +17,6 @@ function resolveStaticPath(dirname) {
 }
 
 app.use('/example', express.static(resolveStaticPath('/example')));
-app.use('/upload', express.static(resolveStaticPath('/upload')));
-app.use('/static', express.static('./static'));
 
 
 console.log('isDev', isDev);
@@ -41,8 +39,33 @@ if (isDev) {
     app.use(WebpackHotMiddleware(compiler, {
         log: console.log
     }));
+    readFileFromMemory = function (filepath, req, res, next) {
+        compiler.outputFileSystem.readFile(filepath, function (err, result) {
+            if (err) {
+                // something error
+                return next();
+            }
+            res.set('content-type', 'text/html');
+            res.send(result);
+            res.end();
+        });
+    };
+
+    app.use('/static', express.static('./static'));
+    Object.keys(webpackConfig.entry).forEach((entry) => {
+        app.get('/' + entry, function (req, res, next) {
+            var viewname = entry + '.html';
+            var filepath = path.join(compiler.outputPath, viewname);
+            console.log(compiler.outputPath, filepath);
+            // 使用webpack提供的outputFileSystem
+            readFileFromMemory(filepath, req, res, next);
+        });
+    });
 } else {
     port = process.env.PORT;
+    app.use('/static', express.static('./static', {
+        maxAge: 31557600000
+    }));
     app.use(express.static('./view'));
 }
 

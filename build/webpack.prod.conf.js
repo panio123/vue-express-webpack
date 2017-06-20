@@ -30,7 +30,7 @@ entryKeys.forEach(function (name) {
 });
 let commeChunk;
 if (entryKeys.length > 1) {
-    commeChunk = new webpack.optimize.CommonsChunkPlugin('common.js');
+    commeChunk = new webpack.optimize.CommonsChunkPlugin('common');
 } else {
     // split vendor js into its own file
     commeChunk = new webpack.optimize.CommonsChunkPlugin({

@@ -13,7 +13,7 @@ entryKeys.forEach(function (name) {
     // https://github.com/ampedandwired/html-webpack-plugin
     var htmlplugin = new HtmlWebpackPlugin({
         filename: config.build.html + '/' + name + '.html',
-        template: './client/index.html',
+        template: './client/' + name + '.html',
         chunks: ['common', name],
         inject: true,
         minify: {

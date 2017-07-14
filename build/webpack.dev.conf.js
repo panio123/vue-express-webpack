@@ -9,7 +9,7 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
     baseWebpackConfig.entry[name] = ['webpack-hot-middleware/client?noInfo=true&reload=true'].concat(baseWebpackConfig.entry[name]);
     var htmlplugin = new HtmlWebpackPlugin({
         filename: name + '.html',
-        template: './client/index.html',
+        template: './client/' + name + '.html',
         chunks: [name],
         inject: true
     });
